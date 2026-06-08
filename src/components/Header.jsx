@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 export default function Header({ onSearch, onRandomRecipe }) {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -11,11 +14,19 @@ export default function Header({ onSearch, onRandomRecipe }) {
     }
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="header">
       <div className="header-top">
         <div className="container">
-          <h1 className="logo">RecipeHub</h1>
+          <Link to="/" className="logo">RecipeHub</Link>
           
           <form className="search-form" onSubmit={handleSubmit}>
             <input
@@ -30,20 +41,25 @@ export default function Header({ onSearch, onRandomRecipe }) {
             </button>
           </form>
 
-          <button className="favorites-link" onClick={() => window.location.hash = '#favorites'}>
+          <Link to="/favorites" className="favorites-link">
             ⭐ Favorites
-          </button>
+          </Link>
         </div>
       </div>
 
-      <nav className="nav">
+      <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
         <div className="container">
-          <a href="#" className="nav-link">Home</a>
-          <a href="#categories" className="nav-link">Categories</a>
-          <a href="#favorites" className="nav-link">My Favorites</a>
-          <button className="surprise-btn" onClick={onRandomRecipe}>
-            🎲 Surprise Me!
+          <button className="hamburger-btn" onClick={toggleMenu} aria-label="Toggle menu">
+            {isMenuOpen ? '✕' : '☰'}
           </button>
+          <div className={`nav-links ${isMenuOpen ? 'nav-links-open' : ''}`}>
+            <Link to="/" className="nav-link" onClick={closeMenu}>Home</Link>
+            <Link to="/categories" className="nav-link" onClick={closeMenu}>Categories</Link>
+            <Link to="/favorites" className="nav-link" onClick={closeMenu}>My Favorites</Link>
+            <button className="surprise-btn" onClick={() => { onRandomRecipe(); closeMenu(); }}>
+              🎲 Surprise Me!
+            </button>
+          </div>
         </div>
       </nav>
     </header>

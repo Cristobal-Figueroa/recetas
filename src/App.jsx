@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import Header from './components/Header'
 import RecipeGrid from './components/RecipeGrid'
+import RecipeDetail from './components/RecipeDetail'
+import Favorites from './components/Favorites'
+import Categories from './components/Categories'
 import { recipeAPI } from './services/recipeAPI'
 import { storageService } from './services/localStorage'
 import './App.css'
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
 
-  // Load initial recipes on mount
   useEffect(() => {
     loadInitialRecipes()
   }, [])
@@ -29,43 +33,62 @@ function App() {
     const results = await recipeAPI.searchByName(query)
     setRecipes(results)
     setLoading(false)
+    navigate('/')
   }
 
   const handleRandomRecipe = async () => {
     setLoading(true)
     const recipe = await recipeAPI.getRandomRecipe()
-    setRecipes(recipe ? [recipe] : [])
+    if (recipe) {
+      navigate(`/recipe/${recipe.idMeal}`)
+    }
     setLoading(false)
   }
 
   const handleRecipeClick = (recipe) => {
-    alert(`Recipe details coming soon!\n\nRecipe: ${recipe.strMeal}\nCategory: ${recipe.strCategory}\nArea: ${recipe.strArea}`)
+    navigate(`/recipe/${recipe.idMeal}`)
   }
 
   return (
-    <div className="app">
+    <>
       <Header 
         onSearch={handleSearch}
         onRandomRecipe={handleRandomRecipe}
       />
       
-      <main className="main-content">
-        {searchTerm && (
-          <h2 className="search-title">Search results for "{searchTerm}"</h2>
-        )}
-        
-        <RecipeGrid 
-          recipes={recipes}
-          onRecipeClick={handleRecipeClick}
-          loading={loading}
-        />
-      </main>
+      <Routes>
+        <Route path="/" element={
+          <main className="main-content">
+            {searchTerm && (
+              <h2 className="search-title">Search results for "{searchTerm}"</h2>
+            )}
+            <RecipeGrid 
+              recipes={recipes}
+              onRecipeClick={handleRecipeClick}
+              loading={loading}
+            />
+          </main>
+        } />
+        <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/categories" element={<Categories />} />
+      </Routes>
 
       <footer className="footer">
         <p>RecipeHub - Your Simple Recipe Finder</p>
         <p>Data provided by TheMealDB</p>
       </footer>
-    </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="app">
+        <AppContent />
+      </div>
+    </Router>
   )
 }
 
