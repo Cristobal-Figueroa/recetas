@@ -89,7 +89,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={
           <main className="main-content">
-            <FilterBar onFilter={handleFilter} />
+            <FilterBar onFilter={handleFilter} recipes={recipes} />
             {searchTerm && (
               <h2 className="search-title">Search results for "{searchTerm}"</h2>
             )}

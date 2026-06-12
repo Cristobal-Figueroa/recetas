@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { recipeAPI } from '../services/recipeAPI';
 import './FilterBar.css';
 
-export default function FilterBar({ onFilter }) {
+export default function FilterBar({ onFilter, recipes }) {
   const [categories, setCategories] = useState([]);
   const [areas, setAreas] = useState([]);
+  const [allAreas, setAllAreas] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedArea, setSelectedArea] = useState('');
 
@@ -12,13 +13,18 @@ export default function FilterBar({ onFilter }) {
     loadFilters();
   }, []);
 
+  useEffect(() => {
+    // Extract unique areas from recipes for the dropdown (always show all available)
+    if (recipes && recipes.length > 0) {
+      const uniqueAreas = [...new Set(recipes.map(r => r.strArea).filter(Boolean))];
+      setAllAreas(uniqueAreas.map(area => ({ strArea: area })));
+      setAreas(uniqueAreas.map(area => ({ strArea: area })));
+    }
+  }, [recipes]);
+
   const loadFilters = async () => {
-    const [cats, areaList] = await Promise.all([
-      recipeAPI.getCategories(),
-      recipeAPI.getAreas()
-    ]);
+    const cats = await recipeAPI.getCategories();
     setCategories(cats);
-    setAreas(areaList);
   };
 
   const handleCategoryChange = (e) => {
@@ -68,7 +74,7 @@ export default function FilterBar({ onFilter }) {
             className="filter-select"
           >
             <option value="">All Cuisines</option>
-            {areas.map(area => (
+            {allAreas.map(area => (
               <option key={area.strArea} value={area.strArea}>
                 {area.strArea}
               </option>
