@@ -21,17 +21,31 @@ export default function RecipeCard({ recipe, onClick }) {
   };
 
   return (
-    <div className="recipe-card" onClick={() => onClick(recipe)}>
+    <div 
+      className="recipe-card" 
+      onClick={() => onClick(recipe)}
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick(recipe);
+        }
+      }}
+      aria-label={`View recipe: ${recipe.strMeal}`}
+    >
       <div className="recipe-image-container">
         <img 
           src={recipe.strMealThumb} 
           alt={recipe.strMeal}
           className="recipe-image"
+          loading="lazy"
         />
         <button 
           className={`favorite-btn ${isFavorite ? 'active' : ''}`}
           onClick={toggleFavorite}
-          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          aria-pressed={isFavorite}
         >
           {isFavorite ? '❤️' : '🤍'}
         </button>
@@ -40,10 +54,14 @@ export default function RecipeCard({ recipe, onClick }) {
       <div className="recipe-info">
         <h3 className="recipe-name">{recipe.strMeal}</h3>
         {recipe.strCategory && (
-          <p className="recipe-category">📁 {recipe.strCategory}</p>
+          <p className="recipe-category" aria-label={`Category: ${recipe.strCategory}`}>
+            📁 {recipe.strCategory}
+          </p>
         )}
         {recipe.strArea && (
-          <p className="recipe-area">🌍 {recipe.strArea}</p>
+          <p className="recipe-area" aria-label={`Cuisine: ${recipe.strArea}`}>
+            🌍 {recipe.strArea}
+          </p>
         )}
       </div>
     </div>

@@ -73,6 +73,30 @@ export const recipeAPI = {
     }
   },
 
+  // Get all areas (cuisines)
+  async getAreas() {
+    try {
+      const response = await fetch(`${MEALDB_BASE_URL}/list.php?a=list`);
+      const data = await response.json();
+      return data.meals || [];
+    } catch (error) {
+      console.error('Error getting areas:', error);
+      return [];
+    }
+  },
+
+  // Get recipes by area
+  async getByArea(area) {
+    try {
+      const response = await fetch(`${MEALDB_BASE_URL}/filter.php?a=${area}`);
+      const data = await response.json();
+      return data.meals || [];
+    } catch (error) {
+      console.error('Error getting recipes by area:', error);
+      return [];
+    }
+  },
+
   // Parse ingredients from meal object
   parseIngredients(meal) {
     const ingredients = [];

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
@@ -6,6 +6,22 @@ export default function Header({ onSearch, onRandomRecipe }) {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light');
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,6 +60,10 @@ export default function Header({ onSearch, onRandomRecipe }) {
           <Link to="/favorites" className="favorites-link">
             ⭐ Favorites
           </Link>
+          
+          <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle theme">
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
         </div>
       </div>
 

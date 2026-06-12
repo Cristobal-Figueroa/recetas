@@ -1,5 +1,5 @@
 :root {
-  /* RecipeHub Colors */
+  /* RecipeHub Colors - Light Mode */
   --color-primary: #FF6B35;
   --color-secondary: #004E89;
   --color-accent: #F7B801;
@@ -21,6 +21,15 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme='dark'] {
+  /* RecipeHub Colors - Dark Mode */
+  --color-background: #1A1A2E;
+  --color-text: #E8E8E8;
+  --color-white: #2D2D44;
+  --color-gray: #A0A0A0;
+  --color-light-gray: #3D3D5C;
 }
 
 * {
