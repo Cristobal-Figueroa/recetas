@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Recipe detail page">
+    <title>Recipe Detail - RecipeHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <a href="index.html" class="logo">RecipeHub</a>
+                <a href="index.html" class="favorites-link">← Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="recipe-detail" id="recipeDetail">
+            <div class="loading-container" id="loading">
+                <div class="spinner"></div>
+                <p>Loading recipe...</p>
+            </div>
+            <div class="error-container" id="noResults" style="display: none;">
+                <p>Recipe not found.</p>
+                <a href="index.html" class="back-btn">Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>RecipeHub - Your Simple Recipe Finder</p>
+        <p>Data provided by TheMealDB API</p>
+    </footer>
+
+    <script type="module" src="js/recipe-detail.js"></script>
+</body>
+</html>
